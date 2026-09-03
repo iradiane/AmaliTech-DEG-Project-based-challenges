@@ -1,13 +1,15 @@
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+import os
 
 # ============================================================
 # CONFIG
 # ============================================================
 st.set_page_config(page_title="The Sugar Trap", layout="wide", initial_sidebar_state="expanded")
 
-DATA_PATH = "cleaned_snacks_data.csv"
+
+DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cleaned_snacks_data.csv")
 NON_SNACK_LABEL = "Non-Snack / Other"
 REQUIRED_COLUMNS = ["product_name", "brands", "primary_category", "sugars_100g", "proteins_100g"]
 ALL_LABEL = "All Categories"
