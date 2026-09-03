@@ -1,3 +1,30 @@
+# The "Sugar Trap" Market Gap Analysis
+
+## A. Executive Summary
+
+Analysis of 134,218 cleaned Open Food Facts products found that only 30.2% (40,546 products) fall into snack-relevant categories, and within those, just 8.9% currently combine high protein (10g+ per 100g) with low sugar (under 5g per 100g). The biggest gap is in **Chocolate & Confectionery**, where only 192 of 7,135 products (2.7%) meet that profile despite the category being one of the largest and most sugar-saturated in the dataset. This points to a genuine "Blue Ocean" opportunity for a high-protein, low-sugar confectionery product, an area current manufacturers have largely left unaddressed. A brand-concentration check ("Who Owns This Shelf?") further shows this specific niche is not yet dominated by major players, lowering the barrier for a new entrant.
+
+## B. Project Links
+
+- **Link to Notebook:** https://colab.research.google.com/drive/1Wk3fg2JzlL4k7pu87EPqKdFkPYlVcI0v?usp=sharing
+- **Link to Dashboard:** https://amalitech-deg-project-based-challenges-v9lvlazrpt65pkffazgjwj.streamlit.app/
+- **Link to Presentation:** https://drive.google.com/file/d/1_ys4PLifmEaccboD2ZDah-xqsrpY1Wse/view?usp=drive_link
+
+## C. Technical Explanation
+
+### Data Cleaning
+
+Rather than downloading Open Food Facts' full multi-gigabyte export, the notebook streams the compressed `.csv.gz` file directly in chunks, filtering for usable rows as it goes rather than after the fact. Of 1,400,000 raw rows scanned, only 154,839 (11.1%) had complete `product_name`, `sugars_100g`, `proteins_100g`, and `categories_tags` fields — rows missing any of these were dropped rather than imputed, since fabricating central nutrition values would directly bias the sugar/protein gap analysis this project depends on. From there, biologically impossible values (any nutrient outside 0–100g per 100g of product) and "empty shell" entries (rows with 0.0g sugar, protein, *and* fat simultaneously — almost always incomplete submissions) were removed, dropping 3,659 rows. A final deduplication pass on `product_name` + `brands` + `categories_tags` removed 16,962 duplicate entries, leaving a final cleaned dataset of **134,218 unique products** (9.6% overall retention from the raw scan).
+
+Category assignment (Story 2) parsed the comma-separated `categories_tags` column and mapped it to 6 high-level buckets (5 snack categories plus a "Non-Snack / Other" catch-all) using priority-ordered keyword matching, validated against real product samples rather than assumed correct from counts alone.
+
+**Note on data hosting:** the cleaned dataset (`cleaned_snacks_data.csv`) is not committed to this repository per the submission guidelines. It is hosted externally and loaded by the dashboard at runtime via a direct URL.
+
+### Candidate's Choice: "Who Owns This Shelf?"
+
+A nutrition gap alone doesn't guarantee an easy market entry — if a handful of large brands already dominate a category, breaking in is a much harder fight than the nutrition chart alone suggests. This addition cross-references the identified opportunity category against the `brands` column already present in the cleaned dataset, surfacing the number of unique brands and the market share held by the top 3, with a plain-language read-out (fragmented / moderately concentrated / highly concentrated). This turns a purely nutritional finding into a more complete go/no-go signal for R&D — checking not just *whether* a gap exists, but *how contested* that gap already is — using data already collected, at no additional cost to the pipeline.
+
+---
 # Project Brief: The "Sugar Trap" Market Gap Analysis
 
 **Client:** Helix CPG Partners (Strategic Food & Beverage Consultancy)
